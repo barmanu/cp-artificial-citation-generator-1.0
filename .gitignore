@@ -1,0 +1,9 @@
+.idea/
+.pytest_cache
+tests/.pytest_cache
+coverage_report
+.coverage
+tests_report
+cp_artificial_citation_generator_1.0.egg-info
+*/__pycache__
+.mypy_cache/

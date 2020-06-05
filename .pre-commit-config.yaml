@@ -1,0 +1,18 @@
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: Running black
+        entry: poetry run black
+        language: system
+        types: [python]
+      - id: flake8
+        name: Running flake8
+        entry: poetry run flake8
+        language: system
+        types: [python]
+      - id: mypy
+        name: Running mypy
+        entry: poetry run mypy
+        language: system
+        types: [python]
