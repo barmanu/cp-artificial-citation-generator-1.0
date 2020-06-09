@@ -2,7 +2,6 @@ import random
 
 
 class CitationMaker:
-
     def __init__(self, processor):
         self.nlp = processor
 
@@ -24,7 +23,9 @@ class CitationMaker:
         labels = []
 
         nlp_processor = citation_config.get("nlp_processor", None)
-        intra_citation_newline_type = citation_config.get("intra_citation_newline_type", None)
+        intra_citation_newline_type = citation_config.get(
+            "intra_citation_newline_type", None
+        )
         dist_ratio = citation_config.get("dist_ratio", 0.45)
 
         if nlp_processor == "spacy" or intra_citation_newline_type == "spacy":

@@ -3,7 +3,7 @@
   "target_tag": "/*/ce:bibliography/ce:bibliography-sec/ce:bib-reference/ce:other-ref",
   "max_citations_from_corpus": 100,
   "min_citations_per_output_file": 10,
-  "nlp_processor": "spacy",
+  "nlp_processor": "ignore",
   "use_index": true,
   "intra_citation_newline_type": "random",
   "break_ratio": 0.65,

@@ -12,8 +12,9 @@ import mlflow
 import mlflow.keras
 import pandas as pd
 import spacy
+from tqdm import tqdm
 
-from generator.data_generator.CitationSectionGenerator import Generator
+from generator.data_generator.citation_section_generator import Generator
 
 
 def validation_for_data(df: pd.DataFrame, target_tag: str):
@@ -96,8 +97,6 @@ def main():
 
     timestmp = str(datetime.now()).replace(" ", "~")
 
-    out_name = ""
-
     args.output = os.path.join(args.output, timestmp)
 
     if not os.path.exists(args.output):
@@ -154,10 +153,12 @@ def main():
         config=data_gen_config
     )
 
+    data_gen_stats = []
+
     # data gen.
     print("### Data Generation Started ...")
     max_len = -1
-    for fake_file in citation_section_generator:
+    for fake_file in tqdm(citation_section_generator):
         gold_words = []
         gold_tags = []
         citation_count = 0
@@ -190,18 +191,21 @@ def main():
                 gold_words.append(w)
             for t in citation_labels:
                 gold_tags.append(t)
-
             citation_count = citation_count + 1
 
-        # x, y files are written
-        file_to_write = (
-                "data-" + str(datetime.now()).replace(" ", "~") + ".csv"
-        )
-
+        file_to_write = "data-" + str(datetime.now()).replace(" ", "~") + ".csv"
         df = pd.DataFrame({"x": gold_words, "y": gold_tags})
         df.to_csv(os.path.join(args.output, file_to_write))
         if len(df) > max_len:
             max_len = len(df)
+        temp = {
+            "name": file_to_write,
+            "citations": citation_count,
+            "tokens": token_count,
+            "intra_citation_newlines": file_intra_citation_newline,
+            "inter_citation_newline": file_inter_citation_newline,
+        }
+        data_gen_stats.append(temp)
 
     # logging data gen params
     for k, v in data_gen_config.items():
@@ -210,6 +214,9 @@ def main():
     with open(os.path.join(args.output, "data-gen-config.json"), "w") as jf:
         json.dump(data_gen_config, jf)
     jf.close()
+
+    data_gen_stats = pd.DataFrame(data_gen_stats)
+    data_gen_stats.to_csv(os.path.join(args.output, "data_generation_stats.csv"))
 
     zip_name = "citation-bio-labelled-data-" + timestmp + ".zip"
     zip_path = os.path.join(args.output, zip_name)
@@ -221,6 +228,9 @@ def main():
     if args.store_at_server:
         mlflow.log_artifact(zip_path)
 
+    # saving the data in S3
+    print("saving data")
+    os.system('aws s3 sync ' + args.output + ' s3://manuscript64k/other_refs/artificial_data/' + timestmp)
     print("### Data Generation Finished ...")
     print("### Done !!!")
 
