@@ -1,12 +1,12 @@
 {
   "data_df": "./nlp/exps/data/64KOtherRefs/other_ref_citations_from_64k_data_set.csv",
   "target_tag": "/*/ce:bibliography/ce:bibliography-sec/ce:bib-reference/ce:other-ref",
-  "max_citations_from_corpus": 100,
-  "min_citations_per_output_file": 10,
+  "max_citations_from_corpus": -1,
+  "min_citations_per_output_file": 45,
   "nlp_processor": "ignore",
-  "use_index": true,
-  "intra_citation_newline_type": "random",
-  "break_ratio": 0.65,
+  "use_index": false,
+  "intra_citation_newline_type": "consistent",
+  "break_ratio": 0.45,
   "inter_citation_newline_type": "consistent",
   "num_of_inter_newlines": 2
 }

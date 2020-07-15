@@ -115,17 +115,18 @@ def main():
     # downloading data and validate
     df = None
     s3_client = boto3.client("s3")
-    if not os.path.exists(data_gen_config["data_df"]):
-        print("### Downloading Dataset")
-        filename = "other_ref_citations_from_64k_data_set.csv"
-        s3_client.download_file(
-            "manuscript64k",
-            "other_refs/" + filename,
-            data_gen_config["data_df"],
-        )
-        print("### Downloading Complete")
-    else:
-        df = pd.read_csv(data_gen_config["data_df"])
+    # if not os.path.exists(data_gen_config["data_df"]):
+    #     print("### Downloading Dataset")
+    #     filename = "other_ref_citations_from_64k_data_set.csv"
+    #     s3_client.download_file(
+    #         "manuscript64k",
+    #         "other_refs/" + filename,
+    #         data_gen_config["data_df"],
+    #     )
+    #     print("### Downloading Complete")
+    # else:
+    df = pd.read_csv(
+        "/Users/barmanu/Work/cp-artificial-citation-generator-1.0/nlp/exps/data/64KOtherRefs/other_ref_citations_from_64k_data_set.csv")
     if not validation_for_data(
             df=df, target_tag=data_gen_config["target_tag"]
     ):  # validating data
